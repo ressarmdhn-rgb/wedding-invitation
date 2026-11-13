@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <!-- viewport wajib supaya tampilan responsif di HP -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Undangan Edu Fair & Career Day 2026</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 1. HERO + PERSONALISASI: nama tamu diisi oleh script.js dari URL -->
+  <header class="hero">
+    <p class="kepada">Kepada Yth.</p>
+    <h2 id="namaTamu" class="nama-tamu">Tamu Undangan</h2>
+    <span id="badgeKategori" class="badge" hidden></span>
+
+    <h1>Edu Fair &amp; Career Day 2026</h1>
+    <p class="tema">Temukan kampus dan karier yang cocok untukmu.</p>
+    <a class="tombol" href="#rsvp">Konfirmasi kehadiran</a>
+  </header>
+
+  <main>
+    <!-- 2. INFORMASI ACARA -->
+    <section id="info">
+      <h2>Waktu &amp; tempat</h2>
+      <dl class="info">
+        <dt>Hari, tanggal</dt><dd>Sabtu, 28 November 2026</dd>
+        <dt>Pukul</dt><dd>07.00 – 15.00 WIB</dd>
+        <dt>Tempat</dt><dd>Aula Utama Sekolah</dd>
+      </dl>
+      <!-- Peta: ganti isi q= dengan alamat sekolahmu -->
+      <iframe class="peta" title="Lokasi acara" loading="lazy"
+        src="https://www.google.com/maps?q=SMKN+6+Tangerang+Selatan&output=embed"></iframe>
+    </section>
+
+    <!-- 3. RUNDOWN -->
+    <section id="rundown">
+      <h2>Rundown acara</h2>
+      <ol class="timeline">
+        <li><time>07.00</time> Registrasi dan pembukaan booth</li>
+        <li><time>08.00</time> Sambutan kepala sekolah</li>
+        <li><time>08.30</time> Talkshow: Memilih jurusan dan jalur karier</li>
+        <li><time>10.30</time> Kunjungan booth kampus dan perusahaan</li>
+        <li><time>12.00</time> Istirahat dan Sholat Dzuhur</li>
+        <li><time>13.00</time> Sesi alumni berbagi pengalaman</li>
+        <li><time>15.30</time> Penutupan dan foto bersama</li>
+      </ol>
+    </section>
+
+    <!-- 4. BENEFIT BOOTH -->
+    <section id="benefit">
+      <h2>Benefit booth</h2>
+      <ul class="benefit">
+        <li>Area booth 3×3 m lengkap dengan meja, kursi, dan listrik</li>
+        <li>Akses langsung ke ratusan siswa kelas X–XII</li>
+        <li>Logo dan profil instansi di materi publikasi acara</li>
+        <li>Konsumsi untuk 2 perwakilan</li>
+      </ul>
+    </section>
+
+    <!-- 5. RSVP -->
+    <section id="rsvp">
+      <h2>Konfirmasi kehadiran</h2>
+      <form id="formRsvp" novalidate>
+        <label for="nama">Nama lengkap</label>
+        <input id="nama" name="nama" type="text" required>
+        
+
+        <label for="hadir">Kehadiran</label>
+        <select id="hadir" name="hadir" required>
+          <option value="">Pilih salah satu</option>
+          <option value="hadir">Hadir</option>
+          <option value="tidak">Tidak hadir</option>
+        </select>
+
+        <label for="jumlah">Jumlah perwakilan</label>
+        <input id="jumlah" name="jumlah" type="number" min="1" max="5" value="1">
+
+        <p id="pesanForm" class="pesan" role="status"></p>
+        <button class="tombol" type="submit">Kirim konfirmasi</button>
+      </form>
+    </section>
+  </main>
+
+  <footer><p>Panitia Edu Fair &amp; Career Day 2026</p></footer>
+  <script src="script.js"></script>
+</body>
+</html>

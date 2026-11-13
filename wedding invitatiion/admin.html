@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin – Blast Undangan</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- PapaParse: library untuk membaca CSV -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+<div class="admin">
+  <h1>Admin: kirim undangan</h1>
+
+  <label for="baseUrl">Alamat halaman undangan (index.html)</label>
+  <input id="baseUrl" type="text">
+
+  <label for="fileCsv">Pilih file data-tamu.csv</label>
+  <input id="fileCsv" type="file" accept=".csv">
+
+  <p id="status" class="pesan" role="status"></p>
+
+  <div class="tabel-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Nama</th><th>Instansi</th><th>Kategori</th><th>WhatsApp</th><th>Aksi</th></tr>
+      </thead>
+      <tbody id="isiTabel"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const baseUrl = document.getElementById("baseUrl");
+const status = document.getElementById("status");
+const isiTabel = document.getElementById("isiTabel");
+
+// Alamat default: index.html di folder yang sama dengan admin.html.
+// Kalau web sudah di-hosting, ganti dengan alamat onlinenya.
+baseUrl.value = new URL("index.html", window.location.href).href;
+
+// Ubah 08xxx jadi 628xxx supaya cocok dengan format wa.me
+function formatWa(nomor) {
+  let n = String(nomor).replace(/\D/g, "");   // buang semua selain angka
+  if (n.startsWith("0")) n = "62" + n.slice(1);
+  return n;
+}
+
+// Buat link personalisasi + link WhatsApp untuk satu tamu
+function buatLinkWa(tamu) {
+  const link = `${baseUrl.value}?to=${encodeURIComponent(tamu.instansi)}&kategori=${encodeURIComponent(tamu.kategori)}`;
+  const teks = `Yth. ${tamu.nama_tamu} (${tamu.instansi}),\n` +
+    `Kami mengundang Anda ke Edu Fair & Career Day 2026.\n` +
+    `Buka undangan Anda di sini: ${link}`;
+  return `https://wa.me/${formatWa(tamu.no_whatsapp)}?text=${encodeURIComponent(teks)}`;
+}
+
+// Isi sel tabel dengan textContent supaya aman dari kode HTML di data
+function sel(teks) {
+  const td = document.createElement("td");
+  td.textContent = teks;
+  return td;
+}
+
+document.getElementById("fileCsv").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  Papa.parse(file, {
+    header: true,            // baris pertama jadi nama properti
+    skipEmptyLines: true,
+    complete: ({ data }) => {
+      isiTabel.innerHTML = "";
+      data.forEach((t) => {
+        const tr = document.createElement("tr");
+        [t.id, t.nama_tamu, t.instansi, t.kategori, t.no_whatsapp].forEach((v) => tr.appendChild(sel(v)));
+
+        const aksi = document.createElement("td");
+        const a = document.createElement("a");
+        a.className = "tombol";
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.textContent = "Kirim Undangan WhatsApp";
+        a.addEventListener("click", () => { a.href = buatLinkWa(t); });  // link dihitung saat diklik, jadi ikut alamat terbaru
+        a.href = buatLinkWa(t);
+        aksi.appendChild(a);
+        tr.appendChild(aksi);
+        isiTabel.appendChild(tr);
+      });
+      status.textContent = `${data.length} tamu berhasil dimuat.`;
+      status.className = "pesan ok";
+    },
+    error: () => {
+      status.textContent = "File tidak bisa dibaca. Pastikan formatnya CSV.";
+      status.className = "pesan error";
+    }
+  });
+});
+</script>
+</body>
+</html>
